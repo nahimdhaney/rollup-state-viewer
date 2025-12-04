@@ -4,8 +4,6 @@ import { useQuery } from '@tanstack/react-query';
 import { ChainStatusCard } from '@/components/chain-status-card';
 import { CheckpointTable } from '@/components/checkpoint-table';
 import { ProofChecker } from '@/components/proof-checker';
-import { HowItWorks } from '@/components/how-it-works';
-import { UsefulInfo } from '@/components/useful-info';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { Badge } from '@/components/ui/badge';
 import { RefreshCw } from 'lucide-react';
@@ -139,16 +137,6 @@ export default function Home() {
             l1Explorer={status?.l1.explorer}
             l2Explorer={status?.l2.explorer}
           />
-        </section>
-
-        {/* How It Works */}
-        <section>
-          <HowItWorks />
-        </section>
-
-        {/* Quick Reference */}
-        <section>
-          <UsefulInfo />
         </section>
 
         {/* Footer */}
