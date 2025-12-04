@@ -140,7 +140,7 @@ export default function Home() {
         {/* Footer */}
         <footer className="text-center text-sm text-muted-foreground pt-8 border-t">
           <p>
-            Taiko State Viewer — Monitor cross-chain checkpoint state in real-time
+            Taiko State Viewer — Real-time cross-chain checkpoint monitoring
           </p>
           <p className="mt-1">
             Network: Taiko Internal Testnet
