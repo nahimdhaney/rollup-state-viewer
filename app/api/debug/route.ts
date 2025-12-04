@@ -2,6 +2,10 @@ import { NextResponse } from 'next/server';
 import { createPublicClient, http, parseAbiItem } from 'viem';
 import { config } from '@/lib/config';
 
+// Force dynamic rendering - no caching
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 const CHECKPOINT_SAVED_EVENT = parseAbiItem(
   'event CheckpointSaved(uint48 indexed blockNumber, bytes32 blockHash, bytes32 stateRoot)'
 );

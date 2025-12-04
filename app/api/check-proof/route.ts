@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { findCheckpointForBlock, getLatestBlock, getRecentCheckpoints } from '@/lib/signal-service';
 import { config } from '@/lib/config';
 
+// Force dynamic rendering - no caching
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();

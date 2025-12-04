@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getRecentCheckpoints } from '@/lib/signal-service';
 
+// Force dynamic rendering - no caching
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const direction = searchParams.get('direction') || 'l1-to-l2';

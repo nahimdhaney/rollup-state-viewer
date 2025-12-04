@@ -2,6 +2,10 @@ import { NextResponse } from 'next/server';
 import { getLatestBlock, getRecentCheckpoints } from '@/lib/signal-service';
 import { config } from '@/lib/config';
 
+// Force dynamic rendering - no caching
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export async function GET() {
   try {
     // Fetch data in parallel
