@@ -3,7 +3,7 @@ export const config = {
     chainId: parseInt(process.env.NEXT_PUBLIC_L1_CHAIN_ID || '32382'),
     name: process.env.NEXT_PUBLIC_L1_CHAIN_NAME || 'Taiko L1',
     rpc: process.env.NEXT_PUBLIC_L1_RPC || 'https://l1rpc.internal.taiko.xyz',
-    signalService: (process.env.NEXT_PUBLIC_L1_SIGNAL_SERVICE || '0xbB128Fd4942e8143B8dc10f38CCfeADb32544264') as `0x${string}`,
+    signalService: (process.env.NEXT_PUBLIC_L1_SIGNAL_SERVICE || '0x53789e39E3310737E8C8cED483032AAc25B39ded') as `0x${string}`,
     broadcaster: (process.env.NEXT_PUBLIC_L1_BROADCASTER || '0x6BdBb69660E6849b98e8C524d266a0005D3655F7') as `0x${string}`,
     explorer: process.env.NEXT_PUBLIC_L1_EXPLORER || 'https://l1explorer.internal.taiko.xyz',
   },

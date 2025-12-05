@@ -45,13 +45,24 @@ export async function POST(request: NextRequest) {
         sourceBlock: targetBlock,
         proofBlock: checkpoint.blockNumber,
         checkpoint,
+        // API endpoint for direct proof generation
+        generateProofApi: {
+          endpoint: '/api/generate-proof',
+          method: 'POST',
+          body: {
+            blockNumber: checkpoint.blockNumber,
+            direction,
+            storageSlot: '<STORAGE_SLOT>', // Replace with actual slot
+          },
+        },
+        // CLI command for manual proof generation
         commands: {
-          proofGenerator: `cd scripts/storage-proof-generator && node dist/index.cjs \\
+          proofGenerator: `storage-proof-generator \\
   --rpc "${sourceConfig.rpc}" \\
   --account "${sourceConfig.broadcaster}" \\
   --slot "<STORAGE_SLOT>" \\
   --block ${checkpoint.blockNumber} \\
-  --output "../../proof.json"`,
+  --output "proof.json"`,
           description: `Generate storage proof for block ${checkpoint.blockNumber}`,
         },
       });
