@@ -7,22 +7,23 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { CheckCircle, XCircle, Loader2, Search } from 'lucide-react';
-import type { ProofResult } from '@/lib/chains/types';
+import type { ProofResult, NetworkType } from '@/lib/chains/types';
 
 interface MultiChainProofCheckerProps {
   chainId: string;
   direction: 'l1ToL2' | 'l2ToL1';
+  network: NetworkType;
 }
 
-export function MultiChainProofChecker({ chainId, direction }: MultiChainProofCheckerProps) {
+export function MultiChainProofChecker({ chainId, direction, network }: MultiChainProofCheckerProps) {
   const [blockNumber, setBlockNumber] = useState('');
   const [queryEnabled, setQueryEnabled] = useState(false);
 
   const { data, isLoading, error, refetch } = useQuery<ProofResult>({
-    queryKey: ['check-proof', chainId, direction, blockNumber],
+    queryKey: ['check-proof', chainId, direction, blockNumber, network],
     queryFn: async () => {
       const res = await fetch(
-        `/api/chains/${chainId}/check-proof?direction=${direction}&blockNumber=${blockNumber}`
+        `/api/chains/${chainId}/check-proof?direction=${direction}&blockNumber=${blockNumber}&network=${network}`
       );
       if (!res.ok) throw new Error('Failed to check proof');
       return res.json();

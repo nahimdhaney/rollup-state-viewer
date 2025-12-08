@@ -1,8 +1,6 @@
 // Arbitrum chain adapter
 import { createPublicClient, http, parseAbiItem, type PublicClient } from 'viem';
-import { mainnet, arbitrum } from 'viem/chains';
 import { ChainAdapter, ChainConfig, ChainStatus, Checkpoint, ProofResult } from './types';
-import { chainConfigs } from './registry';
 
 // SendRootUpdated event from Outbox contract on L1
 // Emitted when L2 state is confirmed on L1
@@ -10,33 +8,18 @@ const SEND_ROOT_UPDATED_EVENT = parseAbiItem(
   'event SendRootUpdated(bytes32 indexed outputRoot, bytes32 indexed l2BlockHash)'
 );
 
-// ArbSys precompile address on Arbitrum L2
-const ARBSYS_ADDRESS = '0x0000000000000000000000000000000000000064';
-
-// ArbSys L1 block number function
-const ARBSYS_ABI = [
-  {
-    name: 'arbBlockNumber',
-    type: 'function',
-    stateMutability: 'view',
-    inputs: [],
-    outputs: [{ type: 'uint256' }],
-  },
-] as const;
-
 export class ArbitrumAdapter implements ChainAdapter {
   config: ChainConfig;
   private l1Client: PublicClient | null = null;
   private l2Client: PublicClient | null = null;
 
-  constructor() {
-    this.config = chainConfigs.arbitrum;
+  constructor(config: ChainConfig) {
+    this.config = config;
   }
 
   private getL1Client(): PublicClient {
     if (!this.l1Client) {
       this.l1Client = createPublicClient({
-        chain: mainnet,
         transport: http(this.config.contracts.l1.rpc),
       });
     }
@@ -46,7 +29,6 @@ export class ArbitrumAdapter implements ChainAdapter {
   private getL2Client(): PublicClient {
     if (!this.l2Client) {
       this.l2Client = createPublicClient({
-        chain: arbitrum,
         transport: http(this.config.contracts.l2.rpc),
       });
     }

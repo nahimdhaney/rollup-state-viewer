@@ -2,6 +2,7 @@
 
 import { ChainTabs } from '@/components/chain-tabs';
 import { ThemeToggle } from '@/components/theme-toggle';
+import { NetworkToggle } from '@/components/network-toggle';
 import { Badge } from '@/components/ui/badge';
 import { supportedChains } from '@/lib/chains/registry';
 
@@ -24,6 +25,7 @@ export default function Home() {
               <Badge variant="outline">
                 {supportedChains.length} Chains Supported
               </Badge>
+              <NetworkToggle />
               <ThemeToggle />
             </div>
           </div>

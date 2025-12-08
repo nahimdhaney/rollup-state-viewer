@@ -1,5 +1,7 @@
 // Chain adapter types for multi-chain state viewer
 
+export type NetworkType = 'mainnet' | 'testnet';
+
 export interface Checkpoint {
   blockNumber: number;
   blockHash: string;

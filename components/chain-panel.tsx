@@ -14,9 +14,10 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { chainConfigs } from '@/lib/chains/registry';
-import type { Checkpoint, ChainStatus } from '@/lib/chains/types';
-import { ArrowRight, ExternalLink, RefreshCw } from 'lucide-react';
+import { chainConfigs, getChainConfig } from '@/lib/chains/registry';
+import { useNetwork } from '@/lib/chains/network-context';
+import type { Checkpoint, ChainStatus, NetworkType } from '@/lib/chains/types';
+import { ExternalLink, RefreshCw } from 'lucide-react';
 import { MultiChainProofChecker } from './multi-chain-proof-checker';
 
 interface ChainPanelProps {
@@ -41,26 +42,35 @@ function StatusCard({
   chainId,
   direction,
   isActive,
+  network,
 }: {
   chainId: string;
   direction: 'l1ToL2' | 'l2ToL1';
   isActive: boolean;
+  network: NetworkType;
 }) {
-  const config = chainConfigs[chainId];
+  const config = getChainConfig(chainId, network);
   const { data, isLoading, isFetching } = useQuery<ChainStatus>({
-    queryKey: ['chain-status', chainId, direction],
+    queryKey: ['chain-status', chainId, direction, network],
     queryFn: async () => {
-      const res = await fetch(`/api/chains/${chainId}/status?direction=${direction}`);
+      const res = await fetch(`/api/chains/${chainId}/status?direction=${direction}&network=${network}`);
       if (!res.ok) throw new Error('Failed to fetch status');
       return res.json();
     },
-    enabled: isActive,
+    enabled: isActive && !!config,
     refetchInterval: isActive ? 10000 : false,
     staleTime: 5000,
   });
 
+  if (!config) return null;
+
   const directionLabel = direction === 'l1ToL2' ? 'L1 → L2' : 'L2 → L1';
-  const sourceExplorer = direction === 'l1ToL2' ? config.contracts.l1.explorerUrl : config.contracts.l2.explorerUrl;
+  // Contract is on the TARGET chain where checkpoints are stored
+  // L2→L1: checkpoints stored on L1 → use L1 explorer
+  // L1→L2: checkpoints stored on L2 → use L2 explorer
+  const contractExplorer = direction === 'l2ToL1'
+    ? config.contracts.l1.explorerUrl
+    : config.contracts.l2.explorerUrl;
 
   if (isLoading) {
     return (
@@ -131,7 +141,7 @@ function StatusCard({
         <div className="pt-2 border-t">
           <p className="text-xs text-muted-foreground">
             Contract: <a
-              href={`${sourceExplorer}/address/${data?.contractAddress}`}
+              href={`${contractExplorer}/address/${data?.contractAddress}`}
               target="_blank"
               rel="noopener noreferrer"
               className="font-mono hover:underline"
@@ -149,25 +159,32 @@ function CheckpointsTable({
   chainId,
   direction,
   isActive,
+  network,
 }: {
   chainId: string;
   direction: 'l1ToL2' | 'l2ToL1';
   isActive: boolean;
+  network: NetworkType;
 }) {
-  const config = chainConfigs[chainId];
+  const config = getChainConfig(chainId, network);
   const { data, isLoading, error } = useQuery<{ checkpoints: Checkpoint[] }>({
-    queryKey: ['checkpoints', chainId, direction],
+    queryKey: ['checkpoints', chainId, direction, network],
     queryFn: async () => {
-      const res = await fetch(`/api/chains/${chainId}/checkpoints?direction=${direction}&limit=10`);
+      const res = await fetch(`/api/chains/${chainId}/checkpoints?direction=${direction}&limit=10&network=${network}`);
       if (!res.ok) throw new Error('Failed to fetch checkpoints');
       return res.json();
     },
-    enabled: isActive,
+    enabled: isActive && !!config,
     refetchInterval: isActive ? 15000 : false,
     staleTime: 10000,
   });
 
-  const explorer = direction === 'l1ToL2'
+  if (!config) return null;
+
+  // Tx is on the TARGET chain where checkpoints are stored
+  // L2→L1: tx on L1 → use L1 explorer
+  // L1→L2: tx on L2 → use L2 explorer
+  const txExplorer = direction === 'l2ToL1'
     ? config.contracts.l1.explorerUrl
     : config.contracts.l2.explorerUrl;
 
@@ -238,7 +255,7 @@ function CheckpointsTable({
             <TableCell>
               {cp.txHash && (
                 <a
-                  href={`${explorer}/tx/${cp.txHash}`}
+                  href={`${txExplorer}/tx/${cp.txHash}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-muted-foreground hover:text-foreground transition-colors"
@@ -256,7 +273,8 @@ function CheckpointsTable({
 
 export function ChainPanel({ chainId, isActive }: ChainPanelProps) {
   const [direction, setDirection] = useState<'l1ToL2' | 'l2ToL1'>('l2ToL1');
-  const config = chainConfigs[chainId];
+  const { network } = useNetwork();
+  const config = getChainConfig(chainId, network);
 
   if (!config) {
     return <div>Unknown chain: {chainId}</div>;
@@ -291,7 +309,7 @@ export function ChainPanel({ chainId, isActive }: ChainPanelProps) {
           </Badge>
         </h3>
         <div className="grid md:grid-cols-2 gap-4">
-          <StatusCard chainId={chainId} direction={direction} isActive={isActive} />
+          <StatusCard chainId={chainId} direction={direction} isActive={isActive} network={network} />
           <Card className="bg-muted/20">
             <CardHeader className="pb-2">
               <CardTitle className="text-lg">Chain Info</CardTitle>
@@ -338,7 +356,7 @@ export function ChainPanel({ chainId, isActive }: ChainPanelProps) {
       <section>
         <h3 className="text-md font-semibold mb-3">Proof Readiness Checker</h3>
         <div className="max-w-xl">
-          <MultiChainProofChecker chainId={chainId} direction={direction} />
+          <MultiChainProofChecker chainId={chainId} direction={direction} network={network} />
         </div>
       </section>
 
@@ -352,7 +370,7 @@ export function ChainPanel({ chainId, isActive }: ChainPanelProps) {
         </h3>
         <Card>
           <CardContent className="pt-4">
-            <CheckpointsTable chainId={chainId} direction={direction} isActive={isActive} />
+            <CheckpointsTable chainId={chainId} direction={direction} isActive={isActive} network={network} />
           </CardContent>
         </Card>
       </section>

@@ -3,6 +3,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useState } from 'react';
 import { ThemeProvider } from '@/components/theme-provider';
+import { NetworkProvider } from '@/lib/chains/network-context';
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(
@@ -25,7 +26,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
       enableSystem
       disableTransitionOnChange
     >
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+      <NetworkProvider>
+        <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+      </NetworkProvider>
     </ThemeProvider>
   );
 }

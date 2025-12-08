@@ -1,34 +1,23 @@
 // Taiko chain adapter
 import { createPublicClient, http, parseAbiItem, type PublicClient } from 'viem';
-import { mainnet } from 'viem/chains';
 import { ChainAdapter, ChainConfig, ChainStatus, Checkpoint, ProofResult } from './types';
-import { chainConfigs } from './registry';
 
 const CHECKPOINT_SAVED_EVENT = parseAbiItem(
   'event CheckpointSaved(uint48 indexed blockNumber, bytes32 blockHash, bytes32 stateRoot)'
 );
-
-// Custom Taiko chain definition
-const taikoMainnet = {
-  id: 167000,
-  name: 'Taiko',
-  nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
-  rpcUrls: { default: { http: [] } },
-};
 
 export class TaikoAdapter implements ChainAdapter {
   config: ChainConfig;
   private l1Client: PublicClient | null = null;
   private l2Client: PublicClient | null = null;
 
-  constructor() {
-    this.config = chainConfigs.taiko;
+  constructor(config: ChainConfig) {
+    this.config = config;
   }
 
   private getL1Client(): PublicClient {
     if (!this.l1Client) {
       this.l1Client = createPublicClient({
-        chain: mainnet,
         transport: http(this.config.contracts.l1.rpc),
       });
     }
@@ -38,7 +27,6 @@ export class TaikoAdapter implements ChainAdapter {
   private getL2Client(): PublicClient {
     if (!this.l2Client) {
       this.l2Client = createPublicClient({
-        chain: taikoMainnet,
         transport: http(this.config.contracts.l2.rpc),
       });
     }

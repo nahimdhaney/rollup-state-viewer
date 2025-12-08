@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getChainAdapter, supportedChains } from '@/lib/chains';
+import type { NetworkType } from '@/lib/chains/types';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -16,6 +17,7 @@ export async function GET(
   const { searchParams } = new URL(request.url);
   const direction = (searchParams.get('direction') || 'l2ToL1') as 'l1ToL2' | 'l2ToL1';
   const blockNumberStr = searchParams.get('blockNumber');
+  const network = (searchParams.get('network') || 'testnet') as NetworkType;
 
   // Validate chain
   if (!supportedChains.includes(chain)) {
@@ -29,6 +31,14 @@ export async function GET(
   if (!['l1ToL2', 'l2ToL1'].includes(direction)) {
     return NextResponse.json(
       { error: 'Invalid direction. Use l1ToL2 or l2ToL1' },
+      { status: 400 }
+    );
+  }
+
+  // Validate network
+  if (!['mainnet', 'testnet'].includes(network)) {
+    return NextResponse.json(
+      { error: 'Invalid network. Use mainnet or testnet' },
       { status: 400 }
     );
   }
@@ -49,10 +59,10 @@ export async function GET(
     );
   }
 
-  const adapter = getChainAdapter(chain);
+  const adapter = getChainAdapter(chain, network);
   if (!adapter) {
     return NextResponse.json(
-      { error: `Failed to initialize adapter for ${chain}` },
+      { error: `Failed to initialize adapter for ${chain} on ${network}` },
       { status: 500 }
     );
   }
