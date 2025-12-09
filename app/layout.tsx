@@ -6,8 +6,8 @@ import { Providers } from '@/components/providers';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Taiko State Viewer',
-  description: 'Real-time cross-chain checkpoint monitor for Taiko L1/L2',
+  title: 'Rollup State Viewer',
+  description: 'Real-time cross-chain checkpoint monitor for rollup networks',
   icons: {
     icon: '/favicon.ico',
   },

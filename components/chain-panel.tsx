@@ -19,6 +19,7 @@ import { useNetwork } from '@/lib/chains/network-context';
 import type { Checkpoint, ChainStatus, NetworkType } from '@/lib/chains/types';
 import { ExternalLink, RefreshCw } from 'lucide-react';
 import { MultiChainProofChecker } from './multi-chain-proof-checker';
+import { ProofGenerator } from './proof-generator';
 
 interface ChainPanelProps {
   chainId: string;
@@ -352,11 +353,17 @@ export function ChainPanel({ chainId, isActive }: ChainPanelProps) {
         </div>
       </section>
 
-      {/* Proof Checker */}
+      {/* Proof Checker & Generator */}
       <section>
-        <h3 className="text-md font-semibold mb-3">Proof Readiness Checker</h3>
-        <div className="max-w-xl">
+        <h3 className="text-md font-semibold mb-3">Proof Tools</h3>
+        <div className="grid md:grid-cols-2 gap-4">
           <MultiChainProofChecker chainId={chainId} direction={direction} network={network} />
+          <ProofGenerator
+            chainId={chainId}
+            direction={direction}
+            network={network}
+            supportsProofGeneration={config.supportsProofGeneration || false}
+          />
         </div>
       </section>
 

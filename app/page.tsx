@@ -15,7 +15,7 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
               <h1 className="text-3xl font-bold tracking-tight">
-                L2 State Viewer
+                Rollup State Viewer
               </h1>
               <p className="text-muted-foreground mt-1">
                 Cross-Chain Checkpoint Monitor
@@ -39,7 +39,7 @@ export default function Home() {
         {/* Footer */}
         <footer className="text-center text-sm text-muted-foreground pt-8 mt-8 border-t">
           <p>
-            L2 State Viewer — Multi-chain cross-chain checkpoint monitoring
+            Rollup State Viewer — Multi-chain cross-chain checkpoint monitoring
           </p>
           <p className="mt-1">
             Supported: Taiko, Arbitrum

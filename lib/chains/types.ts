@@ -34,6 +34,15 @@ export interface ProofResult {
   error?: string;
 }
 
+export interface LayerConfig {
+  address: string;
+  rpc: string;
+  chainId: number;
+  explorerUrl: string;
+  broadcaster?: string;  // Contract address for storage proofs
+  checkpointsSlot?: number;  // Storage slot for checkpoints
+}
+
 export interface ChainConfig {
   id: string;
   name: string;
@@ -44,19 +53,10 @@ export interface ChainConfig {
     l2ToL1: boolean;
   };
   contracts: {
-    l1: {
-      address: string;
-      rpc: string;
-      chainId: number;
-      explorerUrl: string;
-    };
-    l2: {
-      address: string;
-      rpc: string;
-      chainId: number;
-      explorerUrl: string;
-    };
+    l1: LayerConfig;
+    l2: LayerConfig;
   };
+  supportsProofGeneration?: boolean;  // Whether this chain supports proof generation
 }
 
 export interface ChainAdapter {

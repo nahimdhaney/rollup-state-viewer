@@ -13,6 +13,7 @@ export const chainConfigs: Record<NetworkType, Record<string, ChainConfig>> = {
         l1ToL2: true,
         l2ToL1: true,
       },
+      supportsProofGeneration: true,
       contracts: {
         l1: {
           address: process.env.NEXT_PUBLIC_TAIKO_TESTNET_L1_SIGNAL_SERVICE ||
@@ -22,6 +23,8 @@ export const chainConfigs: Record<NetworkType, Record<string, ChainConfig>> = {
           rpc: process.env.TAIKO_TESTNET_L1_RPC || process.env.TAIKO_L1_RPC || 'https://l1rpc.internal.taiko.xyz',
           chainId: 32382,
           explorerUrl: 'https://l1explorer.internal.taiko.xyz',
+          broadcaster: process.env.TAIKO_TESTNET_L1_BROADCASTER || '0x6BdBb69660E6849b98e8C524d266a0005D3655F7',
+          checkpointsSlot: 254,
         },
         l2: {
           address: process.env.NEXT_PUBLIC_TAIKO_TESTNET_L2_SIGNAL_SERVICE ||
@@ -31,6 +34,8 @@ export const chainConfigs: Record<NetworkType, Record<string, ChainConfig>> = {
           rpc: process.env.TAIKO_TESTNET_L2_RPC || process.env.TAIKO_L2_RPC || 'https://rpc.internal.taiko.xyz',
           chainId: 167001,
           explorerUrl: 'https://blockscout.internal.taiko.xyz',
+          broadcaster: process.env.TAIKO_TESTNET_L2_BROADCASTER || '0x6BdBb69660E6849b98e8C524d266a0005D3655F7',
+          checkpointsSlot: 254,
         },
       },
     },
@@ -71,6 +76,7 @@ export const chainConfigs: Record<NetworkType, Record<string, ChainConfig>> = {
         l1ToL2: true,
         l2ToL1: true,
       },
+      supportsProofGeneration: true,
       contracts: {
         l1: {
           address: process.env.NEXT_PUBLIC_TAIKO_MAINNET_L1_SIGNAL_SERVICE ||
@@ -79,6 +85,8 @@ export const chainConfigs: Record<NetworkType, Record<string, ChainConfig>> = {
           rpc: process.env.TAIKO_MAINNET_L1_RPC || 'https://eth.llamarpc.com',
           chainId: 1,
           explorerUrl: 'https://etherscan.io',
+          broadcaster: process.env.TAIKO_MAINNET_L1_BROADCASTER,
+          checkpointsSlot: 254,
         },
         l2: {
           address: process.env.NEXT_PUBLIC_TAIKO_MAINNET_L2_SIGNAL_SERVICE ||
@@ -87,6 +95,8 @@ export const chainConfigs: Record<NetworkType, Record<string, ChainConfig>> = {
           rpc: process.env.TAIKO_MAINNET_L2_RPC || 'https://rpc.mainnet.taiko.xyz',
           chainId: 167000,
           explorerUrl: 'https://taikoscan.io',
+          broadcaster: process.env.TAIKO_MAINNET_L2_BROADCASTER,
+          checkpointsSlot: 254,
         },
       },
     },
