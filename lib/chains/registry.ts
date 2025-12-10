@@ -39,6 +39,40 @@ export const chainConfigs: Record<NetworkType, Record<string, ChainConfig>> = {
         },
       },
     },
+    linea: {
+      id: 'linea',
+      name: 'Linea (Sepolia)',
+      shortName: 'Linea',
+      directions: {
+        l1ToL2: true,
+        l2ToL1: true,
+      },
+      supportsProofGeneration: true,
+      contracts: {
+        l1: {
+          // LineaRollup contract on Sepolia
+          address: process.env.NEXT_PUBLIC_LINEA_SEPOLIA_L1_ROLLUP ||
+            process.env.LINEA_SEPOLIA_L1_ROLLUP ||
+            '0xB218f8A4Bc926cF1cA7b3423c154a0D627Bdb7E5',
+          rpc: process.env.LINEA_SEPOLIA_L1_RPC || 'https://sepolia.drpc.org',
+          chainId: 11155111,
+          explorerUrl: 'https://sepolia.etherscan.io',
+          broadcaster: process.env.LINEA_SEPOLIA_L1_BROADCASTER || '0x20728d202A12f8306d01D0E54aE99885AfA31d83',
+          checkpointsSlot: 282, // stateRootHashes mapping slot
+        },
+        l2: {
+          // L1MessageService on Linea Sepolia
+          address: process.env.NEXT_PUBLIC_LINEA_SEPOLIA_L2_MESSAGE_SERVICE ||
+            process.env.LINEA_SEPOLIA_L2_MESSAGE_SERVICE ||
+            '0x508Ca82Df566dCD1B0DE8296634F3E2F3E66C6CD',
+          rpc: process.env.LINEA_SEPOLIA_L2_RPC || 'https://rpc.sepolia.linea.build',
+          chainId: 59141,
+          explorerUrl: 'https://sepolia.lineascan.build',
+          broadcaster: process.env.LINEA_SEPOLIA_L2_BROADCASTER,
+          checkpointsSlot: 282,
+        },
+      },
+    },
     arbitrum: {
       id: 'arbitrum',
       name: 'Arbitrum (Sepolia)',
@@ -97,6 +131,40 @@ export const chainConfigs: Record<NetworkType, Record<string, ChainConfig>> = {
           explorerUrl: 'https://taikoscan.io',
           broadcaster: process.env.TAIKO_MAINNET_L2_BROADCASTER,
           checkpointsSlot: 254,
+        },
+      },
+    },
+    linea: {
+      id: 'linea',
+      name: 'Linea',
+      shortName: 'Linea',
+      directions: {
+        l1ToL2: true,
+        l2ToL1: true,
+      },
+      supportsProofGeneration: true,
+      contracts: {
+        l1: {
+          // LineaRollup contract on Ethereum mainnet
+          address: process.env.NEXT_PUBLIC_LINEA_MAINNET_L1_ROLLUP ||
+            process.env.LINEA_MAINNET_L1_ROLLUP ||
+            '0xd19d4B5d358258f05D7B411E21A1460D11B0876F',
+          rpc: process.env.LINEA_MAINNET_L1_RPC || 'https://eth.llamarpc.com',
+          chainId: 1,
+          explorerUrl: 'https://etherscan.io',
+          broadcaster: process.env.LINEA_MAINNET_L1_BROADCASTER,
+          checkpointsSlot: 282, // stateRootHashes mapping slot
+        },
+        l2: {
+          // L1MessageService on Linea mainnet
+          address: process.env.NEXT_PUBLIC_LINEA_MAINNET_L2_MESSAGE_SERVICE ||
+            process.env.LINEA_MAINNET_L2_MESSAGE_SERVICE ||
+            '0x508Ca82Df566dCD1B0DE8296634F3E2F3E66C6CD',
+          rpc: process.env.LINEA_MAINNET_L2_RPC || 'https://rpc.linea.build',
+          chainId: 59144,
+          explorerUrl: 'https://lineascan.build',
+          broadcaster: process.env.LINEA_MAINNET_L2_BROADCASTER,
+          checkpointsSlot: 282,
         },
       },
     },

@@ -7,6 +7,7 @@ export * from './network-context';
 import { ChainAdapter, NetworkType } from './types';
 import { TaikoAdapter } from './taiko-adapter';
 import { ArbitrumAdapter } from './arbitrum-adapter';
+import { LineaAdapter } from './linea-adapter';
 import { getSupportedChains, getChainConfig } from './registry';
 
 // Cache adapters by network+chainId
@@ -45,6 +46,9 @@ export function getChainAdapter(chainId: string, network: NetworkType = 'testnet
       break;
     case 'arbitrum':
       adapter = new ArbitrumAdapter(config);
+      break;
+    case 'linea':
+      adapter = new LineaAdapter(config);
       break;
     default:
       return null;
