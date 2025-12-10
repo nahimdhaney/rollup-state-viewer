@@ -25,22 +25,29 @@ function parseHash(): { chain: string | null; direction: 'l1ToL2' | 'l2ToL1' | n
 
 export function ChainTabs() {
   const { network } = useNetwork();
-  const [activeChain, setActiveChain] = useState<string>(() => {
-    const { chain } = parseHash();
-    if (chain && supportedChains.includes(chain)) return chain;
-    return supportedChains[0];
-  });
-  const [activeDirection, setActiveDirection] = useState<'l1ToL2' | 'l2ToL1'>(() => {
-    const { direction } = parseHash();
-    return direction || 'l2ToL1';
-  });
+  const [isInitialized, setIsInitialized] = useState(false);
+  const [activeChain, setActiveChain] = useState<string>(supportedChains[0]);
+  const [activeDirection, setActiveDirection] = useState<'l1ToL2' | 'l2ToL1'>('l2ToL1');
 
   // Update URL hash when chain or direction changes
   const updateHash = useCallback((chain: string, direction: 'l1ToL2' | 'l2ToL1') => {
+    if (typeof window === 'undefined') return;
     const newHash = `#${chain}-${direction.toLowerCase()}`;
     if (window.location.hash !== newHash) {
       window.history.replaceState(null, '', newHash);
     }
+  }, []);
+
+  // Initialize from URL hash on mount (client-side only)
+  useEffect(() => {
+    const { chain, direction } = parseHash();
+    if (chain && supportedChains.includes(chain)) {
+      setActiveChain(chain);
+    }
+    if (direction) {
+      setActiveDirection(direction);
+    }
+    setIsInitialized(true);
   }, []);
 
   // Handle hash change from browser navigation
@@ -71,10 +78,12 @@ export function ChainTabs() {
     updateHash(activeChain, direction);
   };
 
-  // Set initial hash on mount
+  // Update hash after initialization
   useEffect(() => {
-    updateHash(activeChain, activeDirection);
-  }, []);
+    if (isInitialized) {
+      updateHash(activeChain, activeDirection);
+    }
+  }, [isInitialized, activeChain, activeDirection, updateHash]);
 
   return (
     <Tabs value={activeChain} onValueChange={handleChainChange} className="w-full">
