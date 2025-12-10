@@ -20,6 +20,7 @@ export interface ChainStatus {
   contractAddress: string;
   currentBlock?: number;  // Current block on the source chain
   blocksBehind?: number;  // How many blocks behind the checkpoint is
+  timeBehind?: string;    // Human-readable time behind (e.g., "6.6 days", "4h 16m")
   error?: string;
 }
 
@@ -59,6 +60,10 @@ export interface ChainConfig {
     l2: LayerConfig;
   };
   supportsProofGeneration?: boolean;  // Whether this chain supports proof generation
+  blockTime?: {
+    l1: number;  // L1 block time in milliseconds
+    l2: number;  // L2 block time in milliseconds
+  };
 }
 
 export interface ChainAdapter {

@@ -1,6 +1,7 @@
 // Taiko chain adapter
 import { createPublicClient, http, parseAbiItem, type PublicClient } from 'viem';
 import { ChainAdapter, ChainConfig, ChainStatus, Checkpoint, ProofResult } from './types';
+import { calculateTimeBehind } from '../utils';
 
 const CHECKPOINT_SAVED_EVENT = parseAbiItem(
   'event CheckpointSaved(uint48 indexed blockNumber, bytes32 blockHash, bytes32 stateRoot)'
@@ -53,6 +54,14 @@ export class TaikoAdapter implements ChainAdapter {
         ? currentBlock - latestCheckpoint.blockNumber
         : undefined;
 
+      // Calculate time behind using source chain block time
+      const blockTime = direction === 'l1ToL2'
+        ? this.config.blockTime?.l1
+        : this.config.blockTime?.l2;
+      const timeBehind = blocksBehind !== undefined && blockTime
+        ? calculateTimeBehind(blocksBehind, blockTime)
+        : undefined;
+
       return {
         chainName: this.config.name,
         direction,
@@ -62,6 +71,7 @@ export class TaikoAdapter implements ChainAdapter {
         contractAddress,
         currentBlock,
         blocksBehind,
+        timeBehind,
       };
     } catch (error) {
       return {

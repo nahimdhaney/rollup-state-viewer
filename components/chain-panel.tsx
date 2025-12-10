@@ -128,10 +128,15 @@ function StatusCard({
             {data.blocksBehind !== undefined && (
               <div>
                 <p className="text-sm text-muted-foreground">Blocks Behind</p>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 flex-wrap">
                   <span className={`text-lg font-semibold ${data.blocksBehind > 100 ? 'text-yellow-500' : 'text-green-500'}`}>
-                    {data.blocksBehind} blocks
+                    {data.blocksBehind.toLocaleString()} blocks
                   </span>
+                  {data.timeBehind && (
+                    <span className="text-sm text-muted-foreground">
+                      (~{data.timeBehind})
+                    </span>
+                  )}
                   {data.blocksBehind <= 100 && (
                     <Badge variant="success" className="text-xs">Synced</Badge>
                   )}

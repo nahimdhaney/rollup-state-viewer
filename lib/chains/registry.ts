@@ -14,6 +14,10 @@ export const chainConfigs: Record<NetworkType, Record<string, ChainConfig>> = {
         l2ToL1: true,
       },
       supportsProofGeneration: true,
+      blockTime: {
+        l1: 12000,  // 12 seconds
+        l2: 3000,   // ~3 seconds on testnet
+      },
       contracts: {
         l1: {
           address: process.env.NEXT_PUBLIC_TAIKO_TESTNET_L1_SIGNAL_SERVICE ||
@@ -48,6 +52,10 @@ export const chainConfigs: Record<NetworkType, Record<string, ChainConfig>> = {
         l2ToL1: true,
       },
       supportsProofGeneration: true,
+      blockTime: {
+        l1: 12000,  // 12 seconds (Sepolia)
+        l2: 2000,   // ~2 seconds
+      },
       contracts: {
         l1: {
           // LineaRollup contract on Sepolia
@@ -81,6 +89,10 @@ export const chainConfigs: Record<NetworkType, Record<string, ChainConfig>> = {
         l1ToL2: true,
         l2ToL1: true,
       },
+      blockTime: {
+        l1: 12000,  // 12 seconds (Sepolia)
+        l2: 250,    // ~250ms
+      },
       contracts: {
         l1: {
           // Outbox contract on Sepolia
@@ -111,6 +123,10 @@ export const chainConfigs: Record<NetworkType, Record<string, ChainConfig>> = {
         l2ToL1: true,
       },
       supportsProofGeneration: true,
+      blockTime: {
+        l1: 12000,  // 12 seconds (Ethereum)
+        l2: 12000,  // ~12 seconds (based rollup)
+      },
       contracts: {
         l1: {
           address: process.env.NEXT_PUBLIC_TAIKO_MAINNET_L1_SIGNAL_SERVICE ||
@@ -143,6 +159,10 @@ export const chainConfigs: Record<NetworkType, Record<string, ChainConfig>> = {
         l2ToL1: true,
       },
       supportsProofGeneration: true,
+      blockTime: {
+        l1: 12000,  // 12 seconds (Ethereum)
+        l2: 2000,   // ~2 seconds
+      },
       contracts: {
         l1: {
           // LineaRollup contract on Ethereum mainnet
@@ -175,6 +195,10 @@ export const chainConfigs: Record<NetworkType, Record<string, ChainConfig>> = {
       directions: {
         l1ToL2: true,
         l2ToL1: true,
+      },
+      blockTime: {
+        l1: 12000,  // 12 seconds (Ethereum)
+        l2: 250,    // ~250ms
       },
       contracts: {
         l1: {

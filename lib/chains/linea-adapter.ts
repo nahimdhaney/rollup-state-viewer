@@ -1,6 +1,7 @@
 // Linea chain adapter
 import { createPublicClient, http, parseAbiItem, type PublicClient } from 'viem';
 import { ChainAdapter, ChainConfig, ChainStatus, Checkpoint, ProofResult } from './types';
+import { calculateTimeBehind } from '../utils';
 
 // DataFinalizedV3 event from LineaRollup contract on L1
 // Emitted when L2 state is finalized on L1
@@ -62,6 +63,14 @@ export class LineaAdapter implements ChainAdapter {
         ? currentBlock - latestCheckpoint.blockNumber
         : undefined;
 
+      // Calculate time behind using source chain block time
+      const blockTime = direction === 'l1ToL2'
+        ? this.config.blockTime?.l1
+        : this.config.blockTime?.l2;
+      const timeBehind = blocksBehind !== undefined && blockTime
+        ? calculateTimeBehind(blocksBehind, blockTime)
+        : undefined;
+
       return {
         chainName: this.config.name,
         direction,
@@ -73,6 +82,7 @@ export class LineaAdapter implements ChainAdapter {
           : this.config.contracts.l1.address, // LineaRollup on L1 for L2→L1
         currentBlock,
         blocksBehind,
+        timeBehind,
       };
     } catch (error) {
       return {
